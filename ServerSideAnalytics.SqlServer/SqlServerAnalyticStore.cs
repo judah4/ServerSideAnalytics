@@ -196,5 +196,16 @@ namespace ServerSideAnalytics.SqlServer
                     .ToList();
             }
         }
+
+        public async Task<IEnumerable<WebRequest>> RequestByPathAsync(string path, DateTime from, DateTime to)
+        {
+            using (var db = GetContext())
+            {
+                return (await db.WebRequest.Where(x => x.Path == path && x.Timestamp >= from && x.Timestamp <= to)
+                    .ToListAsync())
+                    .Select(x => Mapper.Map<WebRequest>(x))
+                    .ToList();
+            }
+        }
     }
 }
