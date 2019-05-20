@@ -12,6 +12,11 @@ namespace ServerSideAnalytics
         private readonly IAnalyticStore _store;
         private List<Func<HttpContext, bool>> _exclude;
 
+        /// <summary>
+        /// Normalize and lowercase path
+        /// </summary>
+        private bool _normalizePath = false;
+
         internal FluidAnalyticBuilder(IAnalyticStore store)
         {
             _store = store;
@@ -44,6 +49,11 @@ namespace ServerSideAnalytics
                 //Ask the store to resolve the geo code of gived ip address 
                 CountryCode = await _store.ResolveCountryCodeAsync(context.Connection.RemoteIpAddress)
             };
+
+            if (_normalizePath)
+            {
+                req.Path = req.Path.ToLowerInvariant().Normalize();
+            }
 
             //Store the request into the store
             await _store.StoreWebRequestAsync(req);
@@ -81,5 +91,17 @@ namespace ServerSideAnalytics
         public FluidAnalyticBuilder LimitToStatusCodes(params HttpStatusCode[] codes) => Exclude(context => !codes.Contains((HttpStatusCode)context.Response.StatusCode));
 
         public FluidAnalyticBuilder LimitToStatusCodes(params int[] codes) => Exclude(context => !codes.Contains(context.Response.StatusCode));
+
+        /// <summary>
+        /// Normalizes and lowercases the request path. Default behavior is false.
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="normalize">normalize the path</param>
+        /// <returns></returns>
+        public FluidAnalyticBuilder NormalizeAndLowercasePath(Func<HttpContext, bool> filter, bool normalize)
+        {
+            _normalizePath = normalize;
+            return this;
+        }
     }
 }
