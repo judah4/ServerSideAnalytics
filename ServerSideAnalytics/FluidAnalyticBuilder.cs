@@ -95,10 +95,9 @@ namespace ServerSideAnalytics
         /// <summary>
         /// Normalizes and lowercases the request path. Default behavior is false.
         /// </summary>
-        /// <param name="filter"></param>
         /// <param name="normalize">normalize the path</param>
         /// <returns></returns>
-        public FluidAnalyticBuilder NormalizeAndLowercasePath(Func<HttpContext, bool> filter, bool normalize)
+        public FluidAnalyticBuilder NormalizeAndLowercasePath(bool normalize)
         {
             _normalizePath = normalize;
             return this;
