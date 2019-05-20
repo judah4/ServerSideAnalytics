@@ -13,6 +13,7 @@
     <PackageTags>storage server side analytics web stat visitors visitor gdpr remote ip refer url network path user username identity geo ip</PackageTags>
     <Version>5.1.2</Version>
     <AssemblyVersion>5.1.2.0</AssemblyVersion>
+    <PackageId>ServerSideAnalytics.SqlServerJudah</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
